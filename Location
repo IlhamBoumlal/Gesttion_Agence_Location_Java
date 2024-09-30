@@ -1,0 +1,75 @@
+package Gestion_agence;
+
+import java.time.LocalDate;
+public class Location {
+	int id;
+	int idClient;
+	int idVehicule;
+	LocalDate date_Location;
+	LocalDate date_Retour;
+	int KilometrageRetour;
+	String Etat_vehicule_Retour;
+	public Location(int id, int idClient, int idVehicule,LocalDate date_Location,LocalDate date_Retour, int kilometrageRetour,
+			String etat_vehicule_Retour) {
+		super();
+		this.id = id;
+		this.idClient = idClient;
+		this.idVehicule = idVehicule;
+		this.date_Location = date_Location;
+		this.date_Retour = date_Retour;
+		this.KilometrageRetour = kilometrageRetour;
+		this.Etat_vehicule_Retour = etat_vehicule_Retour;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getIdClient() {
+		return idClient;
+	}
+	public void setIdClient(int idClient) {
+		this.idClient = idClient;
+	}
+	public int getIdVehicule() {
+		return idVehicule;
+	}
+	public void setIdVehicule(int idVehicule) {
+		this.idVehicule = idVehicule;
+	}
+	public LocalDate getDate_Location() {
+		return date_Location;
+	}
+	public void setDate_Location(LocalDate date_Location) {
+		this.date_Location = date_Location;
+	}
+	public LocalDate getDate_Retour() {
+		return date_Retour;
+
+	}
+	public void setDate_Retour(LocalDate date_Retour) {
+		this.date_Retour = date_Retour;
+	}
+	public int getKilometrageRetour() {
+		return KilometrageRetour;
+	}
+	public void setKilometrageRetour(int kilometrageRetour) {
+		KilometrageRetour = kilometrageRetour;
+	}
+	public String getEtat_vehicule_Retour() {
+		return Etat_vehicule_Retour;
+	}
+	public void setEtat_vehicule_Retour(String etat_vehicule_Retour) {
+		Etat_vehicule_Retour = etat_vehicule_Retour;
+	}
+	
+	@Override
+	public String toString() {
+		return "Location [id=" + id + ", idClient=" + idClient + ", idVehicule=" + idVehicule + ", date_Location="
+				+ date_Location + ", date_Retour=" + date_Retour + ", KilometrageRetour=" + KilometrageRetour
+				+ ", Etat_vehicule_Retour=" + Etat_vehicule_Retour + "]";
+	}
+	
+}
