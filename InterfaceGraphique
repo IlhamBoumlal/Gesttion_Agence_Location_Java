@@ -1,0 +1,540 @@
+package Gestion_agence;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.time.LocalDate;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+public class gestionAgenceIG extends JFrame implements ActionListener{
+	gestion_Location gestionLocation;
+	JPanel cPanel; //Pour client
+	JPanel vPanel; // Pour vehicule
+	JPanel lPanel; // Pour location
+	JPanel mainPanel,mainPanel3,mainPanel2,mainPanel1;
+	JButton b1,b2,b3,b4,b5,bv1,bv2,bv3,bv4,bv5,bl1,bl2,bl3,bl4,bl5,bl6,bl7;
+	JLabel text2;
+	JLabel text3;
+	JTextField nom,prenom,age,id,idv,marque,modele,anneev,idL,idcL,idVe,Date1,Date2,Kil,etatR;
+	public gestionAgenceIG()
+	{
+		this.setTitle("Gestion Agence");
+		this.setSize(800,600);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		//--------------------------Client------------------------
+		//initialisation de cPanel
+		cPanel=new JPanel(new GridLayout(0,2));
+		JLabel text1=new JLabel("Client",SwingConstants.CENTER);
+		text1.setFont(new Font("Arial", Font.BOLD, 24)); 
+        text1.setForeground(Color.BLUE);
+		
+		JLabel idcl=new JLabel("id:");
+		id= new JTextField(10);
+		JLabel nomcl=new JLabel("Nom:");
+		nom= new JTextField(10);
+		JLabel prenomcl=new JLabel("Prénom:");
+		prenom= new JTextField(10);
+		JLabel agecl=new JLabel("Age:");
+		age= new JTextField(10);
+		
+		JPanel bPanel=new JPanel();
+		 b1= new JButton("Ajouter client");
+		b1.setBackground(Color.pink);
+		 b2= new JButton("Supprimer client");
+		b2.setBackground(Color.pink);
+		b3= new JButton("Modifier client");
+		b3.setBackground(Color.pink);
+		b4= new JButton("Chercher client");
+		b4.setBackground(Color.pink);
+		b5= new JButton("Afficher Tous les clients");
+		b5.setBackground(Color.pink);
+		
+		cPanel.add(idcl);
+		cPanel.add(id);
+		cPanel.add(nomcl);
+		cPanel.add(nom);
+		cPanel.add(prenomcl);
+		cPanel.add(prenom);
+		cPanel.add(agecl);
+		cPanel.add(age);
+		bPanel.add(b1);
+		bPanel.add(b2);
+		bPanel.add(b3);
+		bPanel.add(b4);
+		bPanel.add(b5);
+		
+		//initialisation de mainPanel
+		mainPanel1=new JPanel(new BorderLayout());
+		mainPanel1.add(text1,BorderLayout.NORTH);
+		mainPanel1.add(cPanel,BorderLayout.CENTER);
+		mainPanel1.add(bPanel,BorderLayout.SOUTH);
+		
+		//programmation des bouttons 
+		b1.addActionListener(this);
+		b2.addActionListener(this);
+		b3.addActionListener(this);
+		b4.addActionListener(this);
+		b5.addActionListener(this);
+		//--------------------------vehicule------------------------
+		
+		//initialisation de vPanel
+		
+		vPanel=new JPanel(new GridLayout(0,2));
+		JLabel text2=new JLabel("Véhicule",SwingConstants.CENTER);
+		text2.setFont(new Font("Arial", Font.BOLD, 24)); 
+		text2.setForeground(Color.BLUE);
+				
+		JLabel idV=new JLabel("id:");
+		idv= new JTextField(10);
+		JLabel marquev=new JLabel("Marque:");
+		marque= new JTextField(10);
+		JLabel modeleV=new JLabel("Modèle:");
+		modele= new JTextField(10);
+		JLabel annee=new JLabel("Année:");
+		 anneev= new JTextField(10);
+				
+		JPanel bvPanel=new JPanel();
+		 bv1= new JButton("Ajouter vehicule");
+		bv1.setBackground(Color.pink);
+		bv2= new JButton("Supprimer vehicule");
+		bv2.setBackground(Color.pink);
+		bv3= new JButton("Modifier vehicule");
+		bv3.setBackground(Color.pink);
+		bv4= new JButton("Chercher vehicule");
+		bv4.setBackground(Color.pink);
+		bv5= new JButton("Afficher tous les vehicules");
+		bv5.setBackground(Color.pink);	
+		
+		vPanel.add(idV);
+		vPanel.add(idv);
+		vPanel.add(marquev);
+		vPanel.add(marque);
+		vPanel.add(modeleV);
+		vPanel.add(modele);
+		vPanel.add(annee);
+		vPanel.add(anneev);
+		bvPanel.add(bv1);
+		bvPanel.add(bv2);
+		bvPanel.add(bv3);
+		bvPanel.add(bv4);
+		bvPanel.add(bv5);
+		
+		//initialisation de mainPanel2
+		mainPanel2=new JPanel(new BorderLayout());
+		mainPanel2.add(text2,BorderLayout.NORTH);
+		mainPanel2.add(vPanel,BorderLayout.CENTER);
+		mainPanel2.add(bvPanel,BorderLayout.SOUTH);
+		//programmation des bouttons 
+		bv1.addActionListener(this);
+		bv2.addActionListener(this);
+		bv3.addActionListener(this);
+		bv4.addActionListener(this);
+		bv5.addActionListener(this);
+		
+		//------------------------Location---------------------------------
+		
+		
+		//initialisation de lPanel
+		lPanel=new JPanel(new GridLayout(0,2));
+		JLabel text3=new JLabel("location",SwingConstants.CENTER);
+		text3.setFont(new Font("Arial", Font.BOLD, 24)); 
+		text3.setForeground(Color.BLUE);
+						
+		JLabel idl=new JLabel("id:");
+		idL= new JTextField(10);
+		JLabel idC=new JLabel("id client:");
+		idcL= new JTextField(10);
+		JLabel idve=new JLabel("id vehicule:");
+		idVe= new JTextField(10);
+		JLabel date1=new JLabel("Date Location :");
+		Date1= new JTextField(10);
+		JLabel date2=new JLabel("Date Retour:");
+		Date2= new JTextField(10);
+		JLabel kil=new JLabel("Kilométrage:");
+		Kil= new JTextField(10);
+		JLabel etatr=new JLabel("Etat Retour:");
+		etatR= new JTextField(10);
+		
+		JPanel blPanel=new JPanel();
+		bl1= new JButton("Ajouter location");
+		bl1.setBackground(Color.pink);
+		bl2= new JButton("Supprimer location");
+		bl2.setBackground(Color.pink);
+		bl3= new JButton("Modifier location");
+		bl3.setBackground(Color.pink);
+		bl4= new JButton("Chercher location");
+		bl4.setBackground(Color.pink);
+		bl5= new JButton("Afficher tous les locations");
+		bl5.setBackground(Color.pink);	
+		bl6= new JButton("Vehicule en location");
+		bl6.setBackground(Color.pink);
+		bl7= new JButton("Cloturer location");
+		bl7.setBackground(Color.pink);
+		
+		lPanel.add(idl);
+		lPanel.add(idL);
+		lPanel.add(idC);
+		lPanel.add(idcL);
+		lPanel.add(idve);
+		lPanel.add(idVe);
+		lPanel.add(date1);
+		lPanel.add(Date1);
+		lPanel.add(date2);
+		lPanel.add(Date2);
+		lPanel.add(kil);
+		lPanel.add(Kil);
+		lPanel.add(etatr);
+		lPanel.add(etatR);
+		
+		blPanel.add(bl1);
+		blPanel.add(bl2);
+		blPanel.add(bl3);
+		blPanel.add(bl4);
+		blPanel.add(bl5);	
+		blPanel.add(bl6);
+		blPanel.add(bl7);
+		
+		//initialisation de mainPanel2
+		mainPanel3=new JPanel(new BorderLayout());
+		mainPanel3.add(text3,BorderLayout.NORTH);
+		mainPanel3.add(lPanel,BorderLayout.CENTER);
+		mainPanel3.add(blPanel,BorderLayout.SOUTH);
+		
+		//programmation des bouttons 
+		bl1.addActionListener(this);
+		bl2.addActionListener(this);
+		bl3.addActionListener(this);
+		bl4.addActionListener(this);
+		bl5.addActionListener(this);
+		bl6.addActionListener(this);
+		bl7.addActionListener(this);
+		
+		//initialisation de mainPanel
+		
+		mainPanel=new JPanel(new BorderLayout());
+		mainPanel.add(mainPanel1,BorderLayout.NORTH);
+		mainPanel.add(mainPanel2,BorderLayout.CENTER);
+		mainPanel.add(mainPanel3,BorderLayout.SOUTH);
+		
+		
+		
+		this.setContentPane(mainPanel);
+		this.setVisible(true);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		gestion_Location gestionLocation= new gestion_Location();
+		
+		//-----------------------Client------------
+		if(e.getSource()==b1)
+		{
+			 if (id.getText().isEmpty() || nom.getText().isEmpty() || prenom.getText().isEmpty() || age.getText().isEmpty()) {
+		           
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+						int Id = Integer.parseInt(id.getText());
+				        String Nom = nom.getText();
+				        String Prenom = prenom.getText();
+				        int Age = Integer.parseInt(age.getText());
+				        
+				        Client nouveauClient = new Client(Id, Nom,Prenom, Age);
+				        try {
+							gestionLocation.ajouterClient(nouveauClient);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==b2)
+		{
+			 if (id.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir le champs de ID !");
+		   } else {
+						int Id = Integer.parseInt(id.getText());
+				       
+				        try {
+							gestionLocation.supprimerClient(Id);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		
+		
+		if(e.getSource()==b3)
+		{
+			
+			 if (nom.getText().isEmpty() || prenom.getText().isEmpty() || age.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+				   String Nom = nom.getText();
+			       String Prenom = prenom.getText();
+			       int Age = Integer.parseInt(age.getText());
+			       Client nouveau=new Client(0,Nom,Prenom,Age);
+			       int idClientAncien=SaisirIDclient();
+					Client ancien=new Client(idClientAncien,"n","p",0);
+				        try {
+							gestionLocation.modifierClient(ancien,nouveau);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==b4)
+		{
+			 if (nom.getText().isEmpty() || prenom.getText().isEmpty() || age.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+			   String Nom = nom.getText();
+		       String Prenom = prenom.getText();
+		       int Age = Integer.parseInt(age.getText());
+				       
+				  try {
+					   System.out.println(gestionLocation.chercherClient(Nom, Prenom, Age));
+				} catch (SQLException e1) {
+						e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==b5)
+		{
+			 gestionLocation.AfficherTousLesClients();
+		
+	     }
+    //---------------------- Vehicule----------------------
+		if(e.getSource()==bv1)
+		{
+			 if (idv.getText().isEmpty() || marque.getText().isEmpty() || modele.getText().isEmpty() ||anneev.getText().isEmpty()) {
+		           
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+						int id = Integer.parseInt(idv.getText());
+				        String marquev = marque.getText();
+				        String modelev = modele.getText();
+				        int annee = Integer.parseInt(anneev.getText());
+				        
+				        Vehicule nouvelleVehicule = new Vehicule(id, marquev,modelev, annee);
+				        try {
+							gestionLocation.ajouterVehicule(nouvelleVehicule);;
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==bv2)
+		{
+			 if (idv.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir le champs de ID !");
+		   } else {
+						int Id = Integer.parseInt(idv.getText());
+				       
+				        try {
+							gestionLocation.supprimerVehicule(Id);;
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		
+		
+		if(e.getSource()==bv3)
+		{
+			
+			 if (marque.getText().isEmpty() || modele.getText().isEmpty() || anneev.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+				   String marquev = marque.getText();
+			       String modelev = modele.getText();
+			       int annee = Integer.parseInt(anneev.getText());
+			       Vehicule nouvelle=new Vehicule(0,marquev,modelev,annee);
+			       int idVehiculeAncienne=SaisirIDvehicule();
+					Vehicule ancienne=new Vehicule(idVehiculeAncienne,"n","p",0);
+				        try {
+							gestionLocation.modifierVehicule(ancienne, nouvelle);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==bv4)
+		{
+			 if (marque.getText().isEmpty() || modele.getText().isEmpty() || anneev.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+			   String marquev = marque.getText();
+		       String modelev = modele.getText();
+		       int annee = Integer.parseInt(anneev.getText());
+				       
+				  try {
+					   System.out.println(gestionLocation.chercherVehicule(marquev, modelev, annee));
+				} catch (SQLException e1) {
+						e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==bv5)
+		{
+			 gestionLocation.AfficherTousLesVehicules();
+		
+	     }
+       //-----------------------Location-----------------------
+		if(e.getSource()==bl1)
+		{
+			 if (idL.getText().isEmpty() || idcL.getText().isEmpty() || idVe.getText().isEmpty() ||Date1.getText().isEmpty() || Date2.getText().isEmpty() || Date2.getText().isEmpty() || Kil.getText().isEmpty() || etatR.getText().isEmpty()) {
+		           
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+						int id = Integer.parseInt(idL.getText());
+						int idcl = Integer.parseInt(idcL.getText());
+						int idv = Integer.parseInt(idVe.getText());
+				        String dateLocation = Date1.getText();
+				        String dateRetour = Date2.getText();
+				        int kil = Integer.parseInt(Kil.getText());
+				        String etatr = etatR.getText();
+				        
+				        LocalDate datelocation = LocalDate.parse(dateLocation);
+				        LocalDate dateretour = LocalDate.parse(dateRetour);
+				        
+				        Location nouvelleLocation = new Location(id, idcl,idv,datelocation,dateretour,kil,etatr);
+				        try {
+							gestionLocation.ajouterLocation(nouvelleLocation);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==bl2)
+		{
+			 if (idL.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir le champs de ID !");
+		   } else {
+						int Id = Integer.parseInt(idL.getText());
+				       
+				        try {
+							gestionLocation.supprimerLocation(Id);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		
+		
+		if(e.getSource()==bl3)
+		{
+			
+			 if (idcL.getText().isEmpty() || idVe.getText().isEmpty()  ||Date1.getText().isEmpty() || Date2.getText().isEmpty() || Kil.getText().isEmpty() || etatR.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+				int idcl = Integer.parseInt(idcL.getText());
+				int idv = Integer.parseInt(idVe.getText());
+		        String dateLocation = Date1.getText();
+		        String dateRetour = Date2.getText();
+		        int kil = Integer.parseInt(Kil.getText());
+		        String etatr = etatR.getText();
+		        
+		        LocalDate datelocation = LocalDate.parse(dateLocation);
+		        LocalDate dateretour = LocalDate.parse(dateRetour);
+		        
+		        int idLocationAncienne=SaisirIDLocation();
+		        
+		        Location ancienne = new Location(idLocationAncienne, 0,0,null,null,0,"");
+		        Location nouvelle = new Location(0, idcl,idv,datelocation,dateretour,kil,etatr);
+				        try {
+							gestionLocation.modifierLocation(ancienne, nouvelle);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==bl4)
+		{
+			 if (idL.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir le champs ID !");
+		   } else {
+			 
+		       int id = Integer.parseInt(idL.getText());
+				       
+				  try {
+					   System.out.println(gestionLocation.chercherLocation(id));
+				} catch (SQLException e1) {
+						e1.printStackTrace();
+						};
+		}}
+		if(e.getSource()==bl5)
+		{
+			 gestionLocation.AfficherTousLesLocations();
+		
+	     }
+		if(e.getSource()==bl6)
+		{
+			 if (idVe.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir le champs ID !");
+		   } else {
+			 
+		       int id = Integer.parseInt(idVe.getText());
+				       
+				  System.out.println(gestionLocation.enLocation(id));;
+		}}
+		if(e.getSource()==bl7)
+		{
+			
+			 if (idL.getText().isEmpty() || Date2.getText().isEmpty() || Kil.getText().isEmpty() || etatR.getText().isEmpty()) { 
+				 
+		            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+		   } else {
+			   int id = Integer.parseInt(idL.getText());
+		        String dateRetour = Date2.getText();
+		        int kil = Integer.parseInt(Kil.getText());
+		        String etatr = etatR.getText();
+		        
+		        LocalDate dateretour = LocalDate.parse(dateRetour);
+		        
+		        Location location = new Location(id,0,0,null,dateretour,kil,etatr);
+				        try {
+							gestionLocation.cloturerLocation(location);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						};
+		}}
+
+	}
+	private int SaisirIDLocation() {
+		String input=JOptionPane.showInputDialog(this, "Veuillez saisir l'ID de la location ancienne !");
+		int id=Integer.parseInt(input);
+		return id;
+		
+	}
+	private int SaisirIDvehicule() {
+		
+		String input=JOptionPane.showInputDialog(this, "Veuillez saisir l'ID de la vehicule ancienne !");
+		int id=Integer.parseInt(input);
+		return id;
+	}
+	public int SaisirIDclient()
+	{
+		String input=JOptionPane.showInputDialog(this, "Veuillez saisir l'ID du client ancien !");
+		int id=Integer.parseInt(input);
+		return id;
+	}
+		
+	
+	public static void main(String[] args) {
+	
+	new gestionAgenceIG();
+}
+}
