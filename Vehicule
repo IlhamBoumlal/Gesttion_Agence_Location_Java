@@ -1,0 +1,47 @@
+package Gestion_agence;
+
+public class Vehicule
+{
+	int id;
+	String marque;
+	String modele;
+	int annee;
+	public Vehicule(int id, String marque, String modele, int annee) {
+		super();
+		this.id = id;
+		this.marque = marque;
+		this.modele = modele;
+		this.annee = annee;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getMarque() {
+		return marque;
+	}
+	public void setMarque(String marque) {
+		this.marque = marque;
+	}
+	public String getModele() {
+		return modele;
+	}
+	public void setModele(String modele) {
+		this.modele = modele;
+	}
+	public int getAnnee() {
+		return annee;
+	}
+	public void setAnnee(int annee) {
+		this.annee = annee;
+	}
+	
+	public String toString() {
+		return "Vehicule [idVehicule=" + id + ", marque=" + marque + ", modele=" + modele + ", annee=" + annee
+				+ "]";
+	}
+	
+	
+}
