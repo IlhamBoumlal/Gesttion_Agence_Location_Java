@@ -1,0 +1,416 @@
+package Gestion_agence;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.Scanner;
+public class gestion_Location {	
+	private String user = "root";
+	private String pass = "";
+	private String url = "jdbc:mysql://localhost:3306/gestionlocation";
+	private Connection myConnection;
+	public gestion_Location() {
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			try {
+				myConnection = DriverManager.getConnection(url, user, pass);
+				System.out.println("connexion établie !");
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+			
+	}
+	//*********client
+	
+	public void ajouterClient(Client client) throws SQLException {
+	    
+	    Client Clientexiste = chercherClient(client.getNom(), client.getPrenom(), client.getAge());
+
+	    if (Clientexiste != null) {
+	        System.out.println("Client déjà existe!");
+	        return;
+	    }
+
+	    String requette = "INSERT INTO client (id, nom, prenom, Age) VALUES (?, ?, ?, ?)";
+	    PreparedStatement pr = myConnection.prepareStatement(requette);
+	    pr.setInt(1, client.getId());
+	    pr.setString(2, client.getNom());
+	    pr.setString(3, client.getPrenom());
+	    pr.setInt(4, client.getAge());
+	    pr.executeUpdate();
+	    System.out.println("Client ajouté !");
+	}
+	public void supprimerClient(int id) throws SQLException
+	{
+		String requette="DELETE FROM client where id=?";
+		
+		PreparedStatement pr=myConnection.prepareStatement(requette);
+		pr.setInt(1, id);
+		pr.executeUpdate();
+		System.out.println("Client supprimé ");
+	}
+	
+	public void modifierClient(Client ancien,Client nouveau) throws SQLException
+	{
+		String requette="UPDATE client SET nom=?,prenom=?, Age=? where id=?";
+		PreparedStatement pr=myConnection.prepareStatement(requette);
+		pr.setString(1,nouveau.getNom());
+		pr.setString(2,nouveau.getPrenom());
+		pr.setInt(3, nouveau.getAge());
+		pr.setInt(4, ancien.getId());
+		pr.executeUpdate();
+		System.out.println("Client modifié ");
+	}
+	
+	public Client chercherClient(String nom, String prenom, int age) throws SQLException {
+	    String requette = "SELECT * FROM client WHERE nom = ? AND prenom = ? AND Age = ?";
+	    PreparedStatement pr = myConnection.prepareStatement(requette);
+	    pr.setString(1, nom);
+	    pr.setString(2, prenom);
+	    pr.setInt(3, age);
+
+	    ResultSet r = pr.executeQuery();
+	    if (r.next()) {
+	        Client client = new Client(r.getInt("id"), r.getString("nom"), r.getString("prenom"), r.getInt("age"));
+	        return client;
+	    }
+
+	    return null;
+	}
+	
+	public void AfficherTousLesClients() {
+        String requete = "SELECT * FROM client";
+        
+        try (Statement statement = myConnection.createStatement();
+             ResultSet resultSet = statement.executeQuery(requete)) {
+             
+            System.out.println("Liste des clients:");
+            
+            while (resultSet.next()) {
+            	
+                System.out.println("ID: " + resultSet.getInt("id") + ", Nom: " + resultSet.getString("nom") + ", Prénom: " + resultSet.getString("prenom") + ", Age: " + resultSet.getInt("age"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération des clients : " + e.getMessage());
+        }
+	}
+	
+	
+	//***********Vehicule
+	
+	public void ajouterVehicule(Vehicule vehicule) throws SQLException {
+	   
+	    Vehicule VehiculeExiste = chercherVehicule(vehicule.getMarque(), vehicule.getModele(), vehicule.getAnnee());
+
+	    if (VehiculeExiste != null) {
+	        System.out.println("Vehicle déjà axiste !");
+	        return;
+	    }
+
+	    String requete = "INSERT INTO vehicule (id, marque, modele, annee) VALUES (?, ?, ?, ?)";
+	    PreparedStatement pr = myConnection.prepareStatement(requete);
+	    pr.setInt(1, vehicule.getId());
+	    pr.setString(2, vehicule.getMarque());
+	    pr.setString(3, vehicule.getModele());
+	    pr.setInt(4, vehicule.getAnnee());
+	    pr.executeUpdate();
+	    System.out.println("vehicule ajoutée !");
+	}
+	
+	public void supprimerVehicule(int id) throws SQLException 
+	{
+		String requete = "DELETE FROM vehicule where id=?";//id situé dans l'argument
+		PreparedStatement pr=myConnection.prepareStatement(requete);
+		pr.setInt(1,id);//1:ordre de la requette
+		pr.executeUpdate();
+		System.out.println("Suppression avec succès");
+	}
+	
+	public void modifierVehicule(Vehicule ancien,Vehicule nouvel) throws SQLException 
+	{
+		String requete = "UPDATE vehicule SET marque=? ,modele=? ,annee=?  WHERE id=?";
+		PreparedStatement pr=myConnection.prepareStatement(requete);
+		pr.setString(1, nouvel.getMarque());
+		pr.setString(2, nouvel.getModele());
+		pr.setInt(3, nouvel.getAnnee());
+		pr.setInt(4,ancien.getId());
+		pr.executeUpdate();
+		System.out.println("Modification avec succès");
+		
+	}
+
+  public Vehicule chercherVehicule(String marque, String modele, int annee) throws SQLException {
+    String requete = "SELECT * FROM vehicule WHERE marque = ? AND modele = ? AND annee = ?";
+    PreparedStatement pr = myConnection.prepareStatement(requete);
+    pr.setString(1, marque);
+    pr.setString(2, modele);
+    pr.setInt(3, annee);
+
+    ResultSet r = pr.executeQuery();
+    if (r.next()) {
+        Vehicule vehicule = new Vehicule(r.getInt("id"), r.getString("marque"), r.getString("modele"), r.getInt("annee"));
+        return vehicule;
+    }
+
+    return null;
+}
+	public void AfficherTousLesVehicules() {
+        String requete = "SELECT * FROM vehicule";
+        
+        try (Statement statement = myConnection.createStatement();
+             ResultSet resultSet = statement.executeQuery(requete)) {
+             
+            System.out.println("Liste des véhicules:");
+            
+            while (resultSet.next()) {
+            	
+                System.out.println("ID: " + resultSet.getInt("id") + ", Marque: " + resultSet.getString("marque") + ", Modèle: " + resultSet.getString("modele") + ", Année: " + resultSet.getInt("annee"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération des véhicules : " + e.getMessage());
+        }
+    }
+	
+	//**********Location
+	
+	public boolean enLocation(int idVehicule) {
+	    String requete = "SELECT * FROM location WHERE idVehicule = ? AND date_Retour IS NULL";
+	    try (PreparedStatement preparedStatement = myConnection.prepareStatement(requete)) {
+	        preparedStatement.setInt(1, idVehicule);
+	        ResultSet result = preparedStatement.executeQuery();
+	        return result.next(); 
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
+	public void ajouterLocation(Location location) throws SQLException {
+	    
+	    Location LocationExiste = chercherLocation(location.getId());
+
+	    if (LocationExiste != null) {
+	        System.out.println("Location existe déjà !");
+	        return;
+	    }
+
+	    String requete = "INSERT INTO location (id, idClient, idVehicule, date_Location, date_Retour, KilometrageRetour, Etat_vehicule_Retour) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	    try (PreparedStatement preparedStatement = myConnection.prepareStatement(requete)) {
+	        preparedStatement.setInt(1, location.getId());
+	        preparedStatement.setInt(2, location.getIdClient());
+	        preparedStatement.setInt(3, location.getIdVehicule());
+	        preparedStatement.setDate(4, java.sql.Date.valueOf(location.getDate_Location()));
+	        preparedStatement.setDate(5, java.sql.Date.valueOf(location.getDate_Retour()));
+	        preparedStatement.setInt(6, location.getKilometrageRetour());
+	        preparedStatement.setString(7, location.getEtat_vehicule_Retour());
+
+	        preparedStatement.executeUpdate();
+	        System.out.println("location ajoutée !");
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	public void supprimerLocation(int id) throws SQLException 
+	{
+		String requete = "DELETE FROM location where id=?";
+		PreparedStatement pr=myConnection.prepareStatement(requete);
+		pr.setInt(1,id);
+		pr.executeUpdate();
+		System.out.println("Suppression avec succès");
+	}
+	
+	public void modifierLocation(Location ancienne,Location nouvelle) throws SQLException 
+	{
+		String requete = "UPDATE location SET idClient=?,idVehicule =?,date_Location =?,date_Retour =?,KilometrageRetour =?,Etat_vehicule_Retour=?  WHERE id=?";
+		PreparedStatement pr=myConnection.prepareStatement(requete);
+		pr.setInt(1, nouvelle.getIdClient());
+		pr.setInt(2, nouvelle.getIdVehicule());
+		pr.setDate(3, java.sql.Date.valueOf(nouvelle.getDate_Location()));
+		pr.setDate(4, java.sql.Date.valueOf(nouvelle.getDate_Retour()));
+		pr.setInt(5, nouvelle.getKilometrageRetour());
+		pr.setString(6, nouvelle.getEtat_vehicule_Retour());
+		pr.setInt(7,ancienne.getId());
+		
+		pr.executeUpdate();
+		System.out.println("Modification avec succès");
+		
+	}
+	public Location chercherLocation(int id) throws SQLException {
+	    String requete = "SELECT * FROM location WHERE id = ?";
+	    PreparedStatement pr = myConnection.prepareStatement(requete);
+	    pr.setInt(1, id);
+
+	    ResultSet r = pr.executeQuery();
+	    if (r.next()) {
+	        Location location = new Location(r.getInt("id"), r.getInt("idClient"), r.getInt("idVehicule"), r.getDate("date_Location").toLocalDate(), r.getDate("date_Retour").toLocalDate(), r.getInt("KilometrageRetour"), r.getString("Etat_vehicule_Retour"));
+	        return location;
+	    }
+
+	    return null;
+	}
+	public void AfficherTousLesLocations() {
+      String requete = "SELECT * FROM location";
+      
+      try (Statement statement = myConnection.createStatement();
+           ResultSet r = statement.executeQuery(requete)) {
+           
+          System.out.println("Liste des locations:");
+          
+          while (r.next()) {
+          	
+              System.out.println("ID: " + r.getInt("id") + ", idClient: " +r.getInt("idClient")+ ", idVehicule: "+r.getInt("idVehicule")+ ",date_Location" +r.getDate("date_Location") + ",date_Retour" +r.getDate("date_Retour")+", KilometrageRetour: " +r.getInt("KilometrageRetour") + ", Etat_vehicule_Retour: " + r.getString("Etat_vehicule_Retour"));
+          }
+      } catch (SQLException e) {
+          System.out.println("Erreur lors de la récupération des locations : " + e.getMessage());
+      }
+  }
+	
+	public void cloturerLocation(Location location) throws SQLException {
+		   
+	    String requete = "UPDATE location SET KilometrageRetour=?, Etat_vehicule_Retour=?, date_Retour=? WHERE id=?";
+
+	    try (PreparedStatement pr = myConnection.prepareStatement(requete)) {
+	        pr.setInt(1, location.getKilometrageRetour());
+	        pr.setString(2, location.getEtat_vehicule_Retour());
+	        pr.setDate(3, java.sql.Date.valueOf(location.getDate_Retour()));
+	        pr.setInt(4, location.getId());
+	       
+	        pr.executeUpdate();
+	        System.out.println("Location cloturée avec succès ! \n");
+	    } catch (SQLException e) { 
+	        e.printStackTrace();
+	    }
+	}
+
+//main
+	public static void main(String[] args) throws ClassNotFoundException, SQLException
+	{
+		Client c1 = new Client(1,"Boumlal","Ilham",21);  
+		Client c2 = new Client(2,"Ali","Ahmed",30); 
+		Client c3 = new Client(3,"Sami","Youssef",26); 
+		
+		Vehicule v1=new Vehicule(1, "marque1", "modele1", 2000);
+		Vehicule v2=new Vehicule(2, "marque2", "modele2", 2002);
+		Vehicule v3=new Vehicule(3, "marque3", "modele3", 2001);
+		
+		
+		
+		
+		Location l1= new Location(1, 1, 2,LocalDate.parse("2024-02-04"),LocalDate.parse("2024-03-07"), 200, "etat1");
+		Location l2= new Location(2, 2, 1, LocalDate.parse("2024-05-11"),LocalDate.parse("2024-09-10"), 202, "etat2");
+		Location l3= new Location(3, 1, 3, LocalDate.parse("2024-06-10"),LocalDate.parse("2024-08-01"), 203, "etat3");
+		
+	    gestion_Location g1=new gestion_Location();
+	  	
+	    System.out.println("1- Ajouter client :");
+	    System.out.println("2- Supprimer client :");       
+	    System.out.println("3- Modifier client :");      
+	    System.out.println("4- Chercher client :");
+	    System.out.println("5- Afficher tous les clients :");
+	    
+	    System.out.println("6- Ajouter vehicule :");
+	    System.out.println("7- Supprimer vehicule :");       
+	    System.out.println("8- Modifier vehicule :");      
+	    System.out.println("9- Chercher vehicule :");
+	    System.out.println("10- Afficher tous les vehicules :");
+	    
+	    System.out.println("11- Ajouter location :");
+	    System.out.println("12- Supprimer location :");       
+	    System.out.println("13- Modifier location :");      
+	    System.out.println("14- Chercher location :");
+	    System.out.println("15- Afficher tous les locations :");
+	    System.out.println("16- vehicule en location :");
+	    System.out.println("17- cloturer une location :");
+	    
+	    Scanner sc=new Scanner(System.in);
+	    System.out.println("Entrez votre choix");
+	    int choix = sc.nextInt();
+	    
+	    switch (choix) {
+        case 1:
+        	g1.ajouterClient(c1);
+            break;
+        case 2:
+        	System.out.println("Entrez un id ");
+        	int id = sc.nextInt();
+        	g1.supprimerClient(id);
+            break;
+        case 3:
+        	//definir l'ancien client  c1 et le nouveau client c2
+            g1.modifierClient(c1, c2);
+            break;
+        case 4:
+        	//definir un nom,prenom et age
+        	System.out.println(g1.chercherClient("S", "Youef", 2)); 
+            break;
+        case 5:
+            g1.AfficherTousLesClients();
+            break;
+        case 6:
+        	g1.ajouterVehicule(v1);
+        	
+            break;
+        case 7:
+        	System.out.println("Entrez un id ");
+        	int i = sc.nextInt();
+        	g1.supprimerVehicule(i);
+            break;
+        case 8:
+            g1.modifierVehicule(v1, v3);
+            break;
+        case 9:
+        	System.out.println(g1.chercherVehicule("marque", "modele", 2000));
+            break;
+        case 10:
+           g1.AfficherTousLesVehicules();
+            break;
+        case 11:
+        	g1.ajouterLocation(l3);
+            break;
+        case 12:
+        	System.out.println("Entrez un id ");
+        	int id1 = sc.nextInt();
+        	
+        	g1.supprimerLocation(id1);
+            break;
+        case 13:
+            g1.modifierLocation(l2, l3);
+            break;
+        case 14:
+        	System.out.println("Entrez un id ");
+        	int id2 = sc.nextInt();
+        	
+            System.out.println(g1.chercherLocation(id2));
+            break;
+        case 15:
+            g1.AfficherTousLesLocations();
+            break;
+        case 16:
+            System.out.println(g1.enLocation(1));
+            break;
+        case 17:
+            g1.cloturerLocation(l3);
+            break;
+        default:
+            System.out.println("Choix invalide. Veuillez réessayer.");
+            break;
+    }
+
+
+	   
+	    
+	    
+	    
+	    
+	    
+}
+}
